@@ -1,0 +1,55 @@
+To get an idea of the different model depths, consider \autoref{tab:model_params}. The deeper models have considerably more parameters that can be varied in training. As discussed in \cref{basic_cnn}, the neural network performs a gradient descent to minimize the loss function. The more parameters it can vary, the more difficult it is to keep a balance between the learning rate $\alpha$ and problems with overfitting. This means, that the more complex the network gets, the harder it is to optimize it.
+
+
+\begin{table*}[h]
+\centering
+\begin{tabular}{@{}ccc@{}}\toprule
+Model Name & Parameters $[\text{Million}]$ & Time per Epoch [sec] \\
+\midrule
+Basic CNN & $0.30$ & $<1$\\
+VGG16 & $15.76$ & $6$\\
+VGG19 & $21.07$ & $5$\\
+ResNet50 & $32.97$ & $7$\\
+ResNet50V2 & $32.95$ & $6$\\
+ResNet101 & $51.99$ & $12$\\
+ResNet101V2 & $51.97$ & $10$\\
+ResNet152 & $67.66$ & $17$\\
+ResNet152V2 & $67.63$ & $16$\\
+EfficientNet-B7 & $21.07$ & $23$\\
+\bottomrule
+\end{tabular}
+\caption{Trainable parameters of the chosen models for training and training time for training on a GPU.}
+\label{tab:model_params}
+\end{table*}
+
+The first training parameter I want to discuss is the \textit{pretraining}. For the deep models there is an option that allows you to download and use a model that has already been training on different training sets. For example you can choose to use a model already trained on ImageNet images. This has the advantage that you don't have to train the network in order for it to learn helpful filters like edge detection, which can help to increase training efficiency. I decided to choose the imagenet pretraining weights to help with training speeds. The pretrained information are obtained simply by downloading the weights that the model has learned in previous training. \\
+
+As \textit{loss function} I use the mean squared error (MSE) \eqref{MSE}. It is the standard loss function for almost all neural network applications and should work fine with our models.
+
+Next, we have to chose an \textit{optimizer} that will help us perform the gradient decent in an efficient way. I chose the most popular optimizer called Adaptive Moment Estimation (Adam) \citep{kingma2017adam}. Its advantage is, that it tracks the previous steps of the gradient decent for every parameter and then changes the learning rate accordingly for every parameter to reduce overfitting. It's given a baseline stepsize (\textit{learning rate}) to change the gradient decent speed with which it is going towards the minimum. The standard value is $0.001$ and I kept this for every training to maintain comparability. Ideally, one would change this value for every model and see the effects it has on overfitting and overall accuracy. I will further discuss this in the results for the basic CNN in \cref{res_basic_cnn}.\\
+
+While some architectures like VGG use dense networks at the end of the convolutional block, others like ResNet don't. Despite that, after providing the additional redshift information, I always use another dense network to also learn the effect of the redshift combined with the already learned features of the image. For this I use a dense network with $512$ neurons. Only the basic CNN varies with two dense networks with 100 neurons each to stick to the architecture used by \citet{Krippendorf_2023}. As mentioned in \cref{basic_cnn}, dense networks need activation functions for which I chose ReLU for its simplicity and effectiveness.\\
+
+The last very important parameter for training is the amount of cycles the model has to train for. Normally, the data is being fed into the training processes in \textit{batch sizes}, meaning only a certain amount of data at a time. Using thousands of samples, high batch sizes could fill up the computer's memory fairly quickly while small batch sizes would train too slowly. I decided to train with a batch size of 32 which is the standard for neural network training. Each run through a single batch is called iteration. One \textit{epoch} is a full cycle trough all of the data. Choosing a suitable number of epochs is quite difficult because it depends strongly on all the other parameters. If the learning rate is very small, more epochs are needed to reach a certain level of training and vice versa. For the deep models I chose 4000 epochs while the basic CNN is only trained for a few hundred epochs before running into overfitting (see \cref{res_basic_cnn}). I decided to use 4000 epochs as a compromise between training for accuracy and overall training time (see \autoref{tab:model_params}). Especially ResNet sometimes picked up certain features after a few thousand epochs of training (see \cref{res_ResNet}). Because of that, 4000 seemed like a good compromise for it to train well.
+
+
+\begin{table*}[h]
+\centering
+\begin{tabular}{@{}cc@{}}\toprule
+Parameter & Chosen Setting \\
+\midrule
+Pretraining* (training catalogue) & Yes (Imagenet) \\
+Loss Function & MSE \\
+Optimizer & Adam \\
+Learning Rate & 0.001 \\
+Dense Units* & $512$ \\
+Dense Activation & ReLU \\
+Batch Size & 32 \\
+Training Epochs* & 4000 \\
+\bottomrule
+\end{tabular}
+\caption{Chosen settings for training the different deep models. \\ *There is no pretraining for the basic CNN and the number of dense units is chosen as discussed in \cref{basic_cnn}. The number of epochs for the basic CNN is varied to see the effects of overfitting and different learning rates in \cref{res_basic_cnn}.}
+\label{tab:model_settings}
+\end{table*}
+
+

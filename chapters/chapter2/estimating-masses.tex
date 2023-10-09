@@ -1,0 +1,69 @@
+To estimate galaxy cluster masses using observational data, we first have to check whether the plasma that emits the X-ray spectrum is in a state of equilibrium. Otherwise we cannot use simplifications for the hydrostatic equilibrium of the ICM. In order to verify that, consider the ICM's speed of sound
+
+\begin{equation}
+\label{c_s}
+    c_s \approx \sqrt{\frac{P}{\rho_g}} = \sqrt{\frac{nk_B T}{\rho_g}} = \sqrt{\frac{k_B T}{\mu m_p}} \sim 1000 \frac{km}{s}
+\end{equation}
+\begin{equation}
+    \mu := \frac{<m>}{m_p}
+\end{equation}
+
+where P is the gas pressure, $\rho_g$ the density of the gas, n the number of gas particles, $m_p$ the proton mass and $\mu$ the mean molecular mass in respect to the mass of a proton.
+The mean molecular mass for a fully ionized hydrogen plasma is $\mu = 0.5$ because there is roughly one proton and one electron for every proton mass. Considering that there are also heavier elements in the ICM, $\mu$ can be estimated to $\mu \sim 0.6$ \citep{Ettori_2019}. For a galaxy cluster with a temperature of $10^8 K$ we optain a speed of sound of $\sim 1000 \, km \cdot s^{-1}$. For a galaxy cluster with a radius of $10^7ly$ this gives a travel time of $\sim 10^9$ years. Taking into account that the cluster age can be estimated with the age of the cosmos \citep{Rakos_2006}, this gives enough time for the ICM to be in a state of equilibrium, especially for the central part where most of the X-ray emission comes from.
+For an equilibrium between the gas pressure and the gravitational force we obtain
+
+\begin{equation}
+    \nabla P = - \rho_g \nabla \Phi,
+\end{equation}
+
+where $\Phi$ is the gravitational potential. Assuming a spherical symmetry the potential is given by
+
+\begin{equation}
+    \Phi(r) = - \frac{GM}{r},
+\end{equation}
+
+where $G$ is the gravitational constant, $M$ a mass and $r$ the distance to the mass observed. This leads to
+
+\begin{equation}
+\label{dif_1}
+    \frac{1}{\rho_g}\frac{dP}{dr} = - \frac{GM(r)}{r^2},
+\end{equation}
+
+where $M(r)$ is the mass within the radius $r$ including the gas mass, stellar mass and the dark matter mass. As used in \eqref{c_s} the gas pressure is given by $P = \rho_g k_B T/(\mu m_p)$. Solving the differential equation \eqref{dif_1} for $M(r)$ we yield 
+
+\begin{equation}
+    M(r) = - \frac{k_B T r^2}{G\mu m_p}\left( \frac{d\ln \rho_g}{dr} + \frac{d\ln T}{dr} \right)
+\end{equation}
+
+for the mass of a galaxy cluster. The cluster temperature can be evaluated with the X-ray spectrum as discussed in \cref{x-ray} leaving the gas density as the only remaining unknown. A powerful tool to evaluate the gas densities is the $\beta$-model \citep{Cavaliere_1976}. 
+It assumes that the velocity distribution of the gas is the same as the velocity distribution of the visible and dark matter. This gives a relation between the gas density and the cluster density
+
+\begin{equation}
+    \rho_g (r) \propto \left[ \rho (r) \right]^{\beta}
+\end{equation}
+
+with
+
+\begin{equation}
+    \beta = \frac{\mu m_p \sigma_v^2}{k_BT_g},
+\end{equation}
+
+where $\sigma_v$ is the velocity distribution of the galaxy cluster. Using this relation, the X-ray spectrum can be modelled as
+
+\begin{equation}
+    I(R) \propto \left[ 1 + \frac{R}{r_c}^2 \right]^{-3\beta + 1/2},
+\end{equation}
+
+where $r_c$ is the central radius.
+This tool-set provides everything needed to evaluate the masses of galaxy clusters. Using the virial theorem, scaling relations between the cluster temperature, mass and radius can be obtained giving us
+
+\begin{equation}
+    T \propto \frac{M_{vir}}{r_{vir}} \propto r^2_{vir} \propto M^{2/3}_{vir},
+\end{equation}
+where $M_{vir}$ and $r_{vir}$ is the mass and radius for which the virial theorem can be used. Typical values of $r_{vir}$ are radii, for which the cluster density is 200 times higher as the critical density of the universe. Sometimes a value of 500 times the critical density is being used, because it is easier to evaluate the mass $M_{500}$ than the mass $M_{200}$.
+\\
+
+Rating the accuracy of this approach, it must be said that both the assumptions of a homogeneous gas and temperature distribution seem to be only partially correct. The gas temperature profile can be dominated by the emission from more dense regions, resulting in a higher measured temperature. Moreover, it has been shown that the temperature has a gradient, dropping towards the cluster's edge \citep{McCourt_2013}.
+Because of this uncertainties, different ways of estimating cluster masses are of great importance.
+
+It is also worth noting that the masses of galaxy clusters can be estimated in a different way. Because of the enormous mass of galaxy clusters, they bend the space-time in such a way, that light travelling through the cluster is bend. Considering how exactly the light is bend, it is possible to estimate the mass of a galaxy clusters. This technique is used to calibrate observational data of sky surveys such as eROSITA's eFEDS \citep{Chiu_2022}.

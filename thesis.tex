@@ -1,0 +1,369 @@
+\documentclass[12pt]{article}
+
+\usepackage[]{graphicx}
+\usepackage[]{color}
+\usepackage{alltt}
+\usepackage{comment}
+\usepackage{amsmath}
+\newcommand{\mytitle}{Galaxy Cluster Mass Estimation Using Deep Neural Networks on Simulated eROSITA X-Ray Data}
+\newcommand{\mytitleger}{Bestimmung der Masse von Galaxienhaufen mithilfe von tiefen neuronalen Netzen auf simulierten eROSITA-Röntgendaten}
+\newcommand{\myname}{Matthias Heim}
+\newcommand{\mysupervisor}{Dr. Sven Krippendorf and Prof. Jochen Weller}
+\newcommand{\mysupervisorger}{Dr. Sven Krippendorf und Prof. Jochen Weller}
+\renewcommand{\arraystretch}{1.2}
+
+\usepackage[a4paper, width = 160mm, top = 35mm, bottom = 30mm, 
+bindingoffset = 0mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{ragged2e}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{afterpage}
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \newpage}
+\usepackage{subcaption}
+\usepackage[labelfont=bf]{caption}
+\usepackage{xcolor}
+\usepackage[round, comma]{natbib}
+\usepackage{fancyhdr}
+\newcommand{\changefont}{%
+    \fontsize{8}{11}\selectfont
+}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\hypersetup{
+  colorlinks = true,
+  linkcolor = black,
+  urlcolor = black,
+  citecolor = black}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[R]{\changefont{\mytitle}}
+\fancyfoot{}
+\fancyfoot[R]{\thepage}
+\setlength{\headheight}{14.5pt}
+\setlength{\parindent}{0pt}
+\interfootnotelinepenalty = 10000
+\numberwithin{equation}{subsection}
+
+% ------------------------------------------------------------------------------
+% MAIN -------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\begin{document}
+
+% FRONT PAGE -------------------------------------------------------------------
+\begin{titlepage}
+\begin{center}
+    
+\LARGE
+Bachelorarbeit
+    
+\vspace{0.5cm}
+      
+\rule{\textwidth}{1.5pt}
+\LARGE
+\textbf{\mytitleger}
+\rule{\textwidth}{1.5pt}
+   
+\vspace{0.5cm}
+      
+\large
+Fakultät für Physik \\
+Ludwig-Maximilians-Universität München 
+
+\vfill
+
+\Large
+\textbf{\myname}
+
+\vfill
+
+\large
+München, 13. September, 2023
+      
+\vfill
+
+\includegraphics[width = 0.4\textwidth]{sigillum.png}
+
+\vfill
+
+\normalsize
+Eingereicht in teilweiser Erfüllung der Anforderungen für den Abschluss des B. Sc. mit Vertiefung Astrophysik
+\\
+
+Betreut von \mysupervisorger
+
+\end{center}
+\end{titlepage}
+
+
+% Second Title
+
+\begin{titlepage}
+\begin{center}
+    
+\LARGE
+Bachelor's Thesis
+    
+\vspace{0.5cm}
+      
+\rule{\textwidth}{1.5pt}
+\LARGE
+\textbf{\mytitle}
+\rule{\textwidth}{1.5pt}
+   
+\vspace{0.5cm}
+      
+\large
+Department of Physics \\
+Ludwig-Maximilians-Universität München 
+
+\vfill
+
+\Large
+\textbf{\myname}
+
+\vfill
+
+\large
+Munich, September 13\textsuperscript{th}, 2023
+      
+\vfill
+
+\includegraphics[width = 0.4\textwidth]{sigillum.png}
+
+\vfill
+
+\normalsize
+Submitted in partial fulfillment of the requirements for the degree of B. Sc. with specialization in astrophysics
+\\
+
+Supervised by \mysupervisor
+
+\end{center}
+\end{titlepage}
+
+% CONTENTS ---------------------------------------------------------------------
+\thispagestyle{empty}
+\section*{Acknowledgements}
+I would like to express a special thank you to the people who helped me to write this thesis and finish my Bachelor of Science in Physics.\\
+
+Firstly, I want to thank Jochen for taking the time to listen to my interest in machine learning and its use in astrophysics in order to find a topic and supervisor for me. It was a great feeling to be given the opportunity to work on such a hot topic in astrophysics. Although not part of this work, I also want to thank you for your great commitment to improving the teaching at our university and the regular meetings (with the coffee you sponsor) we have with the group of student associations. It is always a pleasure talking to you!\\
+
+Secondly, I want to thank Sven for the great support during my thesis, no matter if you were in Munich or somewhere around the globe. I always enjoyed the meetings with you in one of your offices or outside the observatory. I am very thankful for you always helping me with my programming issues and taking so much time during the past semester to guide me towards the development of my neural network. I gained a lot of insight into the work of a scientist from both of you and I look forward to continuing my academic journey at LMU.\\
+
+Lastly, I want to thank Hannah for being the best girlfriend I could wish for. You always take the time to listen to my problems and help me figure them out with even more commitment than me. I'm certain that I would not have been able to finish my bachelor's without your tremendous and unselfish help. \textit{I love you}!
+\afterpage{\blankpage}
+\pagenumbering{Roman}
+\newpage
+
+\begin{abstract}
+
+\noindent I examine three different deep convolutional neural networks (CNNs) to see if they are capable of estimating galaxy cluster masses from simulations made for eROSITA's Final Equatorial Depth Survey (eFEDS). Building up on a recent approach to infer these masses using a more simple CNN from \citet{Krippendorf_2023}, I study the differences in architecture, training and accuracy between the deep and the simple models. For that I firstly cover the basics of galaxy cluster X-ray emission and machine learning. Using the three architectures, I am able to get mass estimations that are close to the simple neural network. I provide a pipeline for training and testing more architectures, information on my training process and on how these models could be optimised in future attempts.
+
+\end{abstract}
+
+\newpage
+\tableofcontents
+
+%%%% if you would want to include material overview
+%%%% use one of the following in addition
+%\newpage
+%\listoffigures
+%\newpage
+%\listoftables
+\newpage
+
+% CHAPTERS ---------------------------------------------------------------------
+
+\pagenumbering{arabic}
+    
+\section{Introduction}
+\label{intro}
+\input{chapters/introduction}
+\newpage
+
+\section{Underlying Fundamentals}
+\label{Fundamentals}
+\input{chapters/chapter2/Fundamentals}
+
+\subsection{X-Ray Spectrum of Galaxies and Galaxy Clusters}
+\label{x-ray}
+\input{chapters/chapter2/x-ray-spectrum}
+
+\subsection{Why are we Interested in Galaxy Masses and why do we use X-rays for this?}
+\input{chapters/chapter2/why-interest-masses}
+\subsection{Estimating the Mass of a Galaxy Cluster}
+After explaining how the spectrum of a galaxy cluster looks like in \cref{x-ray}, I will explain how to estimate a galaxy cluster's mass using this spectrum and other techniques.
+\subsubsection{Traditional Mass Estimation using Observational Data}
+\label{mass_est}
+\input{chapters/chapter2/estimating-masses}
+\subsubsection{A new Approach using Convolutional Neural Networks}
+\label{new_approach}
+\input{chapters/chapter2/cnn_approach}
+
+\subsection{The Structure of Convolutional Neural Networks}
+\label{CNN Structure}
+\input{chapters/chapter2/cnn_structure}
+\subsubsection{A Basic Convolutional Neural Network}
+\label{basic_cnn}
+\input{chapters/chapter2/basic_cnn}
+\subsubsection{Deep CNNs}
+\input{chapters/chapter2/deep_cnns}
+\subsubsection*{VGG}
+\input{chapters/chapter2/VGG_Network}
+\subsubsection*{ResNet}
+\input{chapters/chapter2/ResNet_Network}
+\subsubsection*{EfficientNet}
+\input{chapters/chapter2/Efficient_Network}
+
+\newpage
+
+\section{Training the Neural Network}
+\label{training}
+\input{chapters/chapter3/training}
+\subsection{The Data Catalogue}
+\label{data_catalogue}
+\input{chapters/chapter3/data_catalogue}
+\subsection{Preparation of the Data}
+\label{data_prep}
+\input{chapters/chapter3/data_prep}
+\subsection{Training Parameters}
+\label{train_params}
+\input{chapters/chapter3/training_params}
+\newpage
+
+\section{Results}
+\label{Results}
+\input{chapters/chapter4/results}
+
+\subsection{The Basic CNN (Baseline)}
+\label{res_basic_cnn}
+\input{chapters/chapter4/basic_cnn}
+
+
+\subsection{VGG}
+
+\input{chapters/chapter4/VGG}
+
+\subsubsection{VGG16}
+\label{vgg_16_res}
+\input{chapters/chapter4/VGG16}
+
+
+\subsubsection{VGG19}
+\input{chapters/chapter4/VGG19}
+
+\subsection{ResNet}
+\input{chapters/chapter4/resnet}
+\label{res_ResNet}
+
+\subsubsection{ResNet50}
+\input{chapters/chapter4/ResNet50}
+
+\subsubsection{ResNet50V2}
+\input{chapters/chapter4/resnet50v2}
+
+\subsubsection{ResNet101}
+\input{chapters/chapter4/resnet101}
+
+\subsubsection{ResNet101V2}
+\input{chapters/chapter4/resnet101v2}
+
+\subsubsection{ResNet152}
+\input{chapters/chapter4/resnet152}
+
+\subsubsection{ResNet152V2}
+\input{chapters/chapter4/resnet152v2}
+
+\subsection{EfficientNet}
+The final architecture that I want to test is also the most recently developed model. It uses machine learning to optimize the model's architecture to reach higher accuracies with lower parameters.
+
+\subsubsection{EfficientNet-B7}
+\input{chapters/chapter4/efficientnetb7}
+
+\newpage
+\subsection{Full Results}
+\label{Results}
+\input{chapters/chapter4/full_results_table}
+
+
+\newpage
+\section{Conclusion}
+\label{conclusion}
+\input{chapters/conclusion}
+\newpage
+
+% ------------------------------------------------------------------------------
+% APPENDIX ---------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+    
+\pagenumbering{Roman}
+
+\setcounter{page}{1} % CHANGE
+
+\appendix
+
+\section{Appendix}
+\label{app}
+\input{chapters/appendix}
+\newpage
+
+\section{Electronic appendix}
+\label{el_app}
+
+All of the code used and developed during this work is available on my gitlab project at:
+
+\url{https://gitlab.physik.uni-muenchen.de/krippendorf-lab/bachelor-ml-cluster-masses}\\
+
+Please note that the code is not publicly available because it is subject to ongoing scientific research. Please contact Dr. Sven Krippendorf for access to my code and the data used to train the neural networks.
+
+\newpage
+    
+% ------------------------------------------------------------------------------
+% BIBLIOGRAPHY -----------------------------------------------------------------
+% ------------------------------------------------------------------------------
+\nocite{*}
+\RaggedRight
+\bibliography{bibliography}
+\bibliographystyle{dcu}
+\newpage
+
+% ------------------------------------------------------------------------------
+% DECLARATION OF AUTHORSHIP-----------------------------------------------------
+% ------------------------------------------------------------------------------
+
+\Large
+\noindent
+\textbf{Declaration of authorship} 
+\vspace{0.5cm}
+\noindent
+\normalsize
+
+I hereby declare that the report submitted is my own unaided work. All direct 
+or indirect sources used are acknowledged as references. I am aware that the 
+Thesis in digital form can be examined for the use of unauthorized aid and in 
+order to determine whether the report as a whole or parts incorporated in it may 
+be deemed as plagiarism. For the comparison of my work with existing sources I 
+agree that it shall be entered in a database where it shall also remain after 
+examination, to enable comparison with future Theses submitted. Further rights 
+of reproduction and usage, however, are not granted here. This paper was not 
+previously presented to another examination board and has not been published.
+\\
+
+\vspace{1cm}
+\textcolor{orange}{Munich, 13\textsuperscript{th} of September, 2023} \\
+
+\vspace{3cm}
+
+\noindent\rule{0.5\textwidth}{0.4pt} \\
+
+\textcolor{orange}{Matthias Heim}
+
+% ------------------------------------------------------------------------------
+
+\end{document}

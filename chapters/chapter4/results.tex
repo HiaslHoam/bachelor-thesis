@@ -1,0 +1,29 @@
+Neural network training can sometimes be tedious and often one gets completely different results for the same parameters chosen. To address the randomness of some training successes and failures, I trained every model ten times. Thus I will provide some training insights about what I noticed within these ten runs and more importantly I will show and examine the strongest model of each run in detail. The used graphs and figures are explained in detail for the basic CNN in \cref{res_basic_cnn} in order to explain problems like overfitting and the effect of different learning rates. For the deep models, I will show the exact same graphs for comparison. After the individual results, I will discuss and compare the complete results in \cref{Results}.\\
+To evaluate the performance of the model's predictions apart from the plots, I use the standard deviation
+
+\begin{equation}
+    \sigma = \sqrt{\frac{\sum_{i=1}^{n}(\|x_i\| - \Tilde{\mu})^2}{n}},
+\end{equation}
+
+where $x_i$ is the difference between the model predictions and the true masses
+
+\begin{equation}
+    x_i =(\log{(M_{500}^{\text{NN}}/M_{\odot})} - \log{(M_{500}^{\text{true}}/M_{\odot})})_i
+\end{equation}
+
+and the expected value
+
+\begin{equation}
+    \Tilde{\mu} = \frac{\sum_{i=1}^{n}\|x_i\|}{n},
+\end{equation}
+
+where $n$ is the number of predictions.
+
+I use another expected value $\mu$ without the absolute value of the difference between the predicted and the true mass
+
+\begin{equation}
+    \mu = \frac{\sum_{i=1}^{n} x_i}{n}.
+\end{equation}
+
+This allowes me to not only see the average difference between the two values, but also whether the predictions are too high ($\mu < 0$) or too low ($\mu > 0$).
+The standard deviation gives a measure of the spread of the models predictions. A model with a high $\sigma$ has a larger spread in predictions than a model with a small $\sigma$.
