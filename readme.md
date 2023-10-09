@@ -2,9 +2,9 @@
 
 In this repo you can find the source code for my Bachelor's Thesis publication. If you are interested in the programming source-code, please contact me.
 
-[[https://raw.githubusercontent.com/HiaslHoam/bachelor-thesis/main/images/Chapter3/cluster_7692.png|alt=cluster_plot]]
+![](https://raw.githubusercontent.com/HiaslHoam/bachelor-thesis/main/images/Chapter3/cluster_7692.png)
 
-[[https://raw.githubusercontent.com/HiaslHoam/bachelor-thesis/main/images/Chapter3/pipeline.png|alt=data_pipeline]]
+![](https://raw.githubusercontent.com/HiaslHoam/bachelor-thesis/main/images/Chapter3/pipeline.png)
 
 
 
